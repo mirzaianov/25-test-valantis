@@ -5,7 +5,7 @@ const timestamp = new Date().toISOString().slice(0, 10).replace(/-/g, '');
 const inputValue = `${PASSWORD}_${timestamp}`;
 
 function GenerateHash() {
-  console.log(`generateHash`);
+  // console.log(`generateHash`);
   return CryptoJS.MD5(inputValue).toString();
 }
 

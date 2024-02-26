@@ -1,0 +1,20 @@
+:root {
+  --neutral-00: #ffffff;
+  --neutral-10: #f8f8f8;
+  --neutral-70: #595d62;
+  --neutral-90: #111928;
+  --accent-00: #a52838;
+  --text-00: #ffffff;
+  --text-90: #111928;
+  --2xs: 4px;
+  --xs: 8px;
+  --s: 16px;
+  --m: 24px;
+  --l: 32px;
+  --xl: 40px;
+  --2xl: 56px;
+  --3xl: 80px;
+  /* --max-w-xs: 674px; */
+  /* --min-w-xl: 675px; */
+  --w-app-xl: 1140px;
+}

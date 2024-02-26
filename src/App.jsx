@@ -1,32 +1,34 @@
 import { useEffect, useMemo, useState } from 'react';
 import GenerateHash from './services/GenerateHash';
+import CardList from './components/CardList';
+import Logo from './assets/img/logo.svg';
+import Spinner from './components/Spinner';
 
-import './App.scss';
+import './App.css';
 
 const URL = 'http://api.valantis.store:40000/';
-const step = 25;
+const limit = 25;
 
 export default function App() {
-  console.log(`App`);
+  // console.log(`App`);
 
-  // const [ids, setIds] = useState([]);
   const [items, setItems] = useState([]);
   const [isloading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
   const [offset, setOffset] = useState(0);
-  const [limit, setLimit] = useState(step);
+  // const [limit, setLimit] = useState(step);
   const [isEnd, setIsEnd] = useState(false);
 
   const hash = useMemo(() => GenerateHash(), []);
 
   useEffect(() => {
-    console.log(`useFetch`);
+    // console.log(`useFetch`);
 
     let cancelled = false;
 
     setIsLoading(true);
     setItems([]);
-    setError(null);
+    // setError(null);
 
     fetch(URL, {
       method: 'POST',
@@ -37,15 +39,12 @@ export default function App() {
       },
       body: JSON.stringify({
         action: 'get_ids',
-        params: {
-          offset: offset,
-          limit: limit,
-        },
+        params: { offset, limit },
       }),
     })
       .then((res) => res.json())
       .then((respData) => {
-        console.log(respData.result);
+        // console.log(respData.result);
 
         if (respData.result.length < limit) {
           setIsEnd(true);
@@ -68,76 +67,75 @@ export default function App() {
       })
       .then((res) => res.json())
       .then((respData) => {
-        console.log(respData.result);
+        // console.log(respData.result);
 
-        const items = respData.result;
+        // const items = respData.result;
         const itemsMap = new Map();
 
-        for (const item of items) {
+        for (const item of respData.result) {
           if (!itemsMap.has(item.id)) {
             itemsMap.set(item.id, item);
           }
         }
 
         const itemsArray = Array.from(itemsMap.values());
-        console.log(itemsArray);
+        // console.log(itemsArray);
 
         setItems(itemsArray);
       })
       .catch((e) => {
-        console.warn(e);
-        setError(e);
+        console.error(e.message);
+        // setError(e);
       })
       .finally(() => {
-        console.log(`finally`);
+        // console.log(`finally`);
         setIsLoading(false);
       });
 
     return () => {
       cancelled = true;
     };
-  }, [URL, hash, offset, limit]);
+  }, [hash, offset]);
 
   const handleNextClick = () => {
-    console.log(`handleNextClick`);
+    // console.log(`handleNextClick`);
 
-    setOffset((offset) => offset + step);
+    setOffset((prev) => prev + limit);
   };
 
   const handlePrevClick = () => {
-    console.log(`handlePrevClick`);
+    // console.log(`handlePrevClick`);
 
-    offset < limit ? null : setOffset((offset) => offset - limit);
+    // offset < limit ? null : setOffset((prev) => prev - limit);
+
+    if (offset >= limit) {
+      setOffset((prev) => prev - limit);
+    }
   };
 
   return (
-    <>
-      <h1>Valantis</h1>
-      <div>Каталог ювелирных изделий</div>
-      {isloading ? (
-        <div>Loading...</div>
-      ) : (
-        <ul>
-          {items.map((item) => (
-            <li key={item.id}>
-              <div>Id: {item.id}</div>
-              <div>Product: {item.product}</div>
-              <div>Price: {item.price}</div>
-              <div>
-                {item.brand ? `Brand: ${item.brand}` : `Имя бренда отсутствует`}
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-      <button
-        disabled={isloading || offset < limit}
-        onClick={handlePrevClick}
-      >{`<<`}</button>
-      <button
-        disabled={isloading || isEnd}
-        onClick={handleNextClick}
-      >{`>>`}</button>
-    </>
+    <div className="app">
+      <div>
+        <img
+          className="app__logo"
+          src={Logo}
+          alt="Valantis"
+        />
+      </div>
+      <h1 className="app__title">Каталог ювелирных изделий</h1>
+      {isloading ? <Spinner /> : <CardList items={items} />}
+      <div className="app__buttons">
+        <button
+          className="app__btn"
+          disabled={isloading || offset < limit}
+          onClick={handlePrevClick}
+        >{`<<`}</button>
+        <button
+          className="app__btn"
+          disabled={isloading || isEnd}
+          onClick={handleNextClick}
+        >{`>>`}</button>
+      </div>
+    </div>
   );
 }

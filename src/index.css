@@ -1,0 +1,23 @@
+@import './styles/lamkov.css';
+@import './styles/vars.css';
+@import './styles/fonts.css';
+
+body {
+  min-height: 100vh;
+  padding: var(--s);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background-color: var(--neutral-10);
+  line-height: 1.2;
+  font-size: var(--p);
+  font-weight: 400;
+  color: var(--text-90);
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
