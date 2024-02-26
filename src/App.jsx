@@ -5,9 +5,11 @@ import Logo from './assets/img/logo.svg';
 import Spinner from './components/Spinner';
 
 import './App.css';
+import Button from './components/Button';
 
 const URL = 'http://api.valantis.store:40000/';
-const limit = 25;
+const limit = 50;
+const fetchCount = 0;
 
 export default function App() {
   // console.log(`App`);
@@ -18,6 +20,7 @@ export default function App() {
   const [offset, setOffset] = useState(0);
   // const [limit, setLimit] = useState(step);
   const [isEnd, setIsEnd] = useState(false);
+  const [count, setCount] = useState(fetchCount);
 
   const hash = useMemo(() => GenerateHash(), []);
 
@@ -87,7 +90,16 @@ export default function App() {
         .catch((e) => {
           console.error(e.message);
           setError(e);
+
+          if (count > 4) {
+            if (!alert('Ошибка на сервере. Пожалуйста, попробуйте позже...')) {
+              window.location.reload();
+            }
+          }
+
           fetchData();
+          setCount((prev) => prev + 1);
+          console.log(`count: ${count}`);
         })
         .finally(() => {
           // console.log(`finally`);
@@ -101,7 +113,7 @@ export default function App() {
     return () => {
       cancelled = true;
     };
-  }, [hash, offset, error]);
+  }, [hash, offset, error, count]);
 
   const handleNextClick = () => {
     // console.log(`handleNextClick`);
@@ -131,16 +143,18 @@ export default function App() {
       <h1 className="app__title">Каталог ювелирных изделий</h1>
       {isloading ? <Spinner /> : <CardList items={items} />}
       <div className="app__buttons">
-        <button
-          className="app__btn"
+        <Button
           disabled={isloading || offset < limit}
           onClick={handlePrevClick}
-        >{`<<`}</button>
-        <button
-          className="app__btn"
+          title="Предыдущие 50 шт."
+          text="<<"
+        />
+        <Button
           disabled={isloading || isEnd}
           onClick={handleNextClick}
-        >{`>>`}</button>
+          title="Следующие 50 шт."
+          text=">>"
+        />
       </div>
     </div>
   );

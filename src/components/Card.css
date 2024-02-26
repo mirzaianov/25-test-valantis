@@ -3,11 +3,11 @@
   display: flex;
   flex-direction: column;
   align-items: start;
-  padding: 16px;
-  gap: 8px;
+  padding: var(--s);
+  gap: var(--xs);
   background-color: var(--neutral-00);
   border-radius: var(--s);
-  box-shadow: 8px 8px 25px 0px var(--neutral-70);
+  box-shadow: var(--xs) var(--xs) var(--m) 0px var(--neutral-70);
 }
 
 .card__id {

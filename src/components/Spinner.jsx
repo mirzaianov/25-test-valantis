@@ -2,6 +2,7 @@ export default function Spinner() {
   const hue = 352;
   const saturation = 61;
   const lightness = 40;
+
   const circle1 = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
   const circle2 = `hsl(${hue}, ${saturation}%, ${lightness + 10}%)`;
   const circle3 = `hsl(${hue}, ${saturation}%, ${lightness + 20}%)`;
