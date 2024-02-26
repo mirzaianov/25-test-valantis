@@ -14,7 +14,7 @@ export default function App() {
 
   const [items, setItems] = useState([]);
   const [isloading, setIsLoading] = useState(false);
-  // const [error, setError] = useState(null);
+  const [error, setError] = useState(null);
   const [offset, setOffset] = useState(0);
   // const [limit, setLimit] = useState(step);
   const [isEnd, setIsEnd] = useState(false);
@@ -30,72 +30,78 @@ export default function App() {
     setItems([]);
     // setError(null);
 
-    fetch(URL, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'X-Auth': hash,
-      },
-      body: JSON.stringify({
-        action: 'get_ids',
-        params: { offset, limit },
-      }),
-    })
-      .then((res) => res.json())
-      .then((respData) => {
-        // console.log(respData.result);
-
-        if (respData.result.length < limit) {
-          setIsEnd(true);
-        }
-
-        return fetch(URL, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            'X-Auth': hash,
-          },
-          body: JSON.stringify({
-            action: 'get_items',
-            params: {
-              ids: respData.result,
-            },
-          }),
-        });
+    const fetchData = () => {
+      fetch(URL, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'X-Auth': hash,
+        },
+        body: JSON.stringify({
+          action: 'get_ids',
+          params: { offset, limit },
+        }),
       })
-      .then((res) => res.json())
-      .then((respData) => {
-        // console.log(respData.result);
+        .then((res) => res.json())
+        .then((respData) => {
+          // console.log(respData.result);
 
-        // const items = respData.result;
-        const itemsMap = new Map();
-
-        for (const item of respData.result) {
-          if (!itemsMap.has(item.id)) {
-            itemsMap.set(item.id, item);
+          if (respData.result.length < limit) {
+            setIsEnd(true);
           }
-        }
 
-        const itemsArray = Array.from(itemsMap.values());
-        // console.log(itemsArray);
+          return fetch(URL, {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              'X-Auth': hash,
+            },
+            body: JSON.stringify({
+              action: 'get_items',
+              params: {
+                ids: respData.result,
+              },
+            }),
+          });
+        })
+        .then((res) => res.json())
+        .then((respData) => {
+          // console.log(respData.result);
 
-        setItems(itemsArray);
-      })
-      .catch((e) => {
-        console.error(e.message);
-        // setError(e);
-      })
-      .finally(() => {
-        // console.log(`finally`);
-        setIsLoading(false);
-      });
+          // const items = respData.result;
+          const itemsMap = new Map();
+
+          for (const item of respData.result) {
+            if (!itemsMap.has(item.id)) {
+              itemsMap.set(item.id, item);
+            }
+          }
+
+          const itemsArray = Array.from(itemsMap.values());
+          // console.log(itemsArray);
+
+          setItems(itemsArray);
+        })
+        .catch((e) => {
+          console.error(e.message);
+          setError(e);
+          fetchData();
+        })
+        .finally(() => {
+          // console.log(`finally`);
+
+          setIsLoading(false);
+        });
+    };
+
+    fetchData();
 
     return () => {
       cancelled = true;
     };
-  }, [hash, offset]);
+  }, [hash, offset, error]);
 
   const handleNextClick = () => {
     // console.log(`handleNextClick`);

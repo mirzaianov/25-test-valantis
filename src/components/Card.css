@@ -19,4 +19,5 @@
   align-self: flex-end;
   margin-top: auto;
   font-size: var(--m);
+  font-weight: 700;
 }
