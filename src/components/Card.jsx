@@ -9,7 +9,7 @@ const Card = ({ id, product, price, brand }) => {
     <div className="card">
       <img
         className="card__img"
-        src="./photo.png"
+        src="/photo.png"
         alt="image"
       />
       <div className="card__id">{id}</div>

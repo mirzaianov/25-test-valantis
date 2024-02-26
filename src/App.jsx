@@ -3,9 +3,10 @@ import GenerateHash from './services/GenerateHash';
 import CardList from './components/CardList';
 import Logo from './assets/img/logo.svg';
 import Spinner from './components/Spinner';
+import Button from './components/Button';
+import Filters from './components/Filters';
 
 import './App.css';
-import Button from './components/Button';
 
 const URL = 'http://api.valantis.store:40000/';
 const limit = 50;
@@ -141,19 +142,20 @@ export default function App() {
         />
       </div>
       <h1 className="app__title">Каталог ювелирных изделий</h1>
+      <Filters />
       {isloading ? <Spinner /> : <CardList items={items} />}
       <div className="app__buttons">
         <Button
           disabled={isloading || offset < limit}
           onClick={handlePrevClick}
           title="Предыдущие 50 шт."
-          text="<<"
+          text="<< -50"
         />
         <Button
           disabled={isloading || isEnd}
           onClick={handleNextClick}
           title="Следующие 50 шт."
-          text=">>"
+          text="+50 >>"
         />
       </div>
     </div>

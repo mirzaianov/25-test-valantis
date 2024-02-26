@@ -7,7 +7,7 @@
   gap: var(--xs);
   background-color: var(--neutral-00);
   border-radius: var(--s);
-  box-shadow: var(--xs) var(--xs) var(--m) 0px var(--neutral-70);
+  box-shadow: var(--2xs) var(--2xs) var(--xs) 0px var(--neutral-70);
 }
 
 .card__id {

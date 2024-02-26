@@ -8,7 +8,7 @@
   background-color: var(--accent-00);
   color: var(--text-00);
   border-radius: var(--s);
-  box-shadow: var(--2xs) var(--2xs) var(--s) 0px var(--neutral-70);
+  box-shadow: var(--2xs) var(--2xs) var(--xs) 0px var(--neutral-70);
 }
 
 .button:hover {
