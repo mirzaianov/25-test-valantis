@@ -5,6 +5,7 @@ import Logo from './assets/img/logo.svg';
 import Spinner from './components/Spinner';
 import Button from './components/Button';
 import Filters from './components/Filters';
+import NoItemsFound from './components/NoItemsFound';
 
 import './App.css';
 
@@ -13,18 +14,20 @@ const limit = 50;
 const fetchCount = 0;
 
 export default function App() {
-  // console.log(`App`);
-
   const [items, setItems] = useState([]);
   const [isloading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [offset, setOffset] = useState(0);
   const [isEnd, setIsEnd] = useState(false);
-  const [count, setCount] = useState(fetchCount);
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(0);
-  const [isFiltered, setIsFiltered] = useState(false);
+  const [productFilter, setProductFilter] = useState('');
+  const [brandFilter, setBrandFilter] = useState('');
+  const [minPriceFilter, setMinPriceFilter] = useState('');
+  const [maxPriceFilter, setMaxPriceFilter] = useState('');
+  const [minPricePlaceholder, setMinPricePlaceholder] = useState(0);
+  const [maxPricePlaceholder, setMaxPricePlaceholder] = useState(0);
   const [filteredItems, setFilteredItems] = useState([]);
+
+  const [count, setCount] = useState(fetchCount);
 
   const hash = useMemo(() => GenerateHash(), []);
 
@@ -82,8 +85,8 @@ export default function App() {
             }
           }
 
-          setMinPrice(min);
-          setMaxPrice(max);
+          setMinPricePlaceholder(min);
+          setMaxPricePlaceholder(max);
 
           const itemsArray = Array.from(itemsMap.values());
 
@@ -125,39 +128,37 @@ export default function App() {
     }
   };
 
-  const filterByProduct = (e) => {
-    const name = e.target.value;
-    console.log(name);
+  useEffect(() => {
+    if (items.length > 0) {
+      let updatedItems = [...items];
 
-    if (name) {
-      setIsFiltered(true);
+      if (productFilter) {
+        updatedItems = updatedItems.filter((item) =>
+          item.product.toLowerCase().includes(productFilter.toLowerCase()),
+        );
+      }
 
-      const updatedList = items.filter((item) => {
-        return item.product.toLowerCase().indexOf(name.toLowerCase()) !== -1;
-      });
+      if (brandFilter) {
+        updatedItems = updatedItems.filter((item) =>
+          item.brand?.toLowerCase().includes(brandFilter.toLowerCase()),
+        );
+      }
 
-      setFilteredItems(updatedList);
-    } else {
-      setIsFiltered(false);
+      if (minPriceFilter) {
+        updatedItems = updatedItems.filter(
+          (item) => item.price >= minPriceFilter,
+        );
+      }
+
+      if (maxPriceFilter) {
+        updatedItems = updatedItems.filter(
+          (item) => item.price <= maxPriceFilter,
+        );
+      }
+
+      setFilteredItems(updatedItems);
     }
-  };
-
-  // const filterByBrand = (e) => {
-  //   console.log(`filterByBrand`);
-  //   const name = e.target.value;
-
-  //   if (name) {
-  //     setIsFiltered(true);
-
-  //     const updatedList = filteredItems.filter((item) => {
-  //       return item.brand.toLowerCase().search(name.toLowerCase()) !== -1;
-  //     });
-
-  //     setFilteredItems(updatedList);
-  //   } else {
-  //     setIsFiltered(false);
-  //   }
-  // };
+  }, [items, productFilter, brandFilter, minPriceFilter, maxPriceFilter]);
 
   return (
     <div className="app">
@@ -170,17 +171,23 @@ export default function App() {
       </div>
       <h1 className="app__title">Каталог ювелирных изделий</h1>
       <Filters
-        minPrice={minPrice}
-        maxPrice={maxPrice}
-        filterByProduct={filterByProduct}
-        // filterByBrand={filterByBrand}
+        productFilter={productFilter}
+        setProductFilter={setProductFilter}
+        brandFilter={brandFilter}
+        setBrandFilter={setBrandFilter}
+        minPriceFilter={minPriceFilter}
+        setMinPriceFilter={setMinPriceFilter}
+        maxPriceFilter={maxPriceFilter}
+        setMaxPriceFilter={setMaxPriceFilter}
+        minPricePlaceholder={minPricePlaceholder}
+        maxPricePlaceholder={maxPricePlaceholder}
       />
       {isloading ? (
         <Spinner />
-      ) : isFiltered ? (
+      ) : filteredItems.length > 0 ? (
         <CardList items={filteredItems} />
       ) : (
-        <CardList items={items} />
+        <NoItemsFound />
       )}
       <div className="app__buttons">
         <Button

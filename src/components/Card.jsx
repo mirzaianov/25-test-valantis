@@ -1,16 +1,16 @@
 import numberWithSpaces from '../utils/numberWithSpaces';
-import Photo from '../assets/img/photo.png';
+// import Photo from '../assets/img/photo.png';
 
 import './Card.css';
 
 const Card = ({ id, product, price, brand }) => {
   return (
     <div className="card">
-      <img
+      {/* <img
         className="card__img"
         src={Photo}
         alt="image"
-      />
+      /> */}
       <div className="card__id">{id}</div>
       <div className="card__product">{product}</div>
       <div className="card__brand">

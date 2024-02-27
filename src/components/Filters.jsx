@@ -3,12 +3,23 @@ import numberWithSpaces from '../utils/numberWithSpaces';
 
 import './Filters.css';
 
-const Filters = ({ minPrice, maxPrice, filterByProduct }) => {
+const Filters = ({
+  productFilter,
+  setProductFilter,
+  brandFilter,
+  setBrandFilter,
+  minPriceFilter,
+  setMinPriceFilter,
+  maxPriceFilter,
+  setMaxPriceFilter,
+  minPricePlaceholder,
+  maxPricePlaceholder,
+}) => {
   const inputRef = useRef();
 
   useEffect(() => {
     inputRef.current?.focus();
-  }, []);
+  }, [inputRef]);
 
   return (
     <div className="filters">
@@ -25,7 +36,11 @@ const Filters = ({ minPrice, maxPrice, filterByProduct }) => {
             ref={inputRef}
             placeholder="Название изделия"
             className="filters__input"
-            onChange={filterByProduct}
+            value={productFilter}
+            onChange={(e) => {
+              console.log(`productFilter >> `, e.target.value);
+              setProductFilter(e.target.value);
+            }}
           />
         </div>
         <div className="filters__brand-search">
@@ -38,29 +53,43 @@ const Filters = ({ minPrice, maxPrice, filterByProduct }) => {
             type="text"
             placeholder="Имя бренда"
             className="filters__input"
-            // onChange={filterByBrand}
+            value={brandFilter}
+            onChange={(e) => {
+              console.log(`brandFilter >> `, e.target.value);
+              setBrandFilter(e.target.value);
+            }}
           />
         </div>
         <div className="filters__price-search">
-          <label htmlFor="minPrice">
+          <label htmlFor="minPricePlaceholder">
             <span>Цена от </span>
           </label>
           <input
-            id="minPrice"
-            name="minPrice"
+            id="minPricePlaceholder"
+            name="minPricePlaceholder"
             type="number"
-            placeholder={`${numberWithSpaces(minPrice)} ₽`}
+            placeholder={`${numberWithSpaces(minPricePlaceholder)} ₽`}
             className="filters__input"
+            value={minPriceFilter}
+            onChange={(e) => {
+              console.log(`minPriceFilter >> `, e.target.value);
+              setMinPriceFilter(e.target.value);
+            }}
           />{' '}
-          <label htmlFor="maxPrice">
+          <label htmlFor="maxPricePlaceholder">
             <span>до </span>
           </label>
           <input
-            id="maxPrice"
-            name="maxPrice"
+            id="maxPricePlaceholder"
+            name="maxPricePlaceholder"
             type="number"
-            placeholder={`${numberWithSpaces(maxPrice)} ₽`}
+            placeholder={`${numberWithSpaces(maxPricePlaceholder)} ₽`}
             className="filters__input"
+            value={maxPriceFilter}
+            onChange={(e) => {
+              console.log(`maxPriceFilter >> `, e.target.value);
+              setMaxPriceFilter(e.target.value);
+            }}
           />
         </div>
       </div>
