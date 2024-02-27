@@ -22,6 +22,8 @@ export default function App() {
   // const [limit, setLimit] = useState(step);
   const [isEnd, setIsEnd] = useState(false);
   const [count, setCount] = useState(fetchCount);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(0);
 
   const hash = useMemo(() => GenerateHash(), []);
 
@@ -76,12 +78,19 @@ export default function App() {
 
           // const items = respData.result;
           const itemsMap = new Map();
+          let min = Infinity;
+          let max = -Infinity;
 
           for (const item of respData.result) {
             if (!itemsMap.has(item.id)) {
               itemsMap.set(item.id, item);
+              min = Math.min(min, item.price);
+              max = Math.max(max, item.price);
             }
           }
+
+          setMinPrice(min);
+          setMaxPrice(max);
 
           const itemsArray = Array.from(itemsMap.values());
           // console.log(itemsArray);
@@ -132,6 +141,8 @@ export default function App() {
     }
   };
 
+  const onFilterChange = (minPrice, maxPrice) => {};
+
   return (
     <div className="app">
       <div>
@@ -142,20 +153,23 @@ export default function App() {
         />
       </div>
       <h1 className="app__title">Каталог ювелирных изделий</h1>
-      <Filters />
+      <Filters
+        minPrice={minPrice}
+        maxPrice={maxPrice}
+      />
       {isloading ? <Spinner /> : <CardList items={items} />}
       <div className="app__buttons">
         <Button
           disabled={isloading || offset < limit}
           onClick={handlePrevClick}
           title="Предыдущие 50 шт."
-          text="<< -50"
+          text="<< Назад"
         />
         <Button
           disabled={isloading || isEnd}
           onClick={handleNextClick}
           title="Следующие 50 шт."
-          text="+50 >>"
+          text="Вперед >>"
         />
       </div>
     </div>

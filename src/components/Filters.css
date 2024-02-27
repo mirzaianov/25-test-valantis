@@ -23,6 +23,10 @@
   border-radius: var(--xs);
 }
 
+.filters__input:focus {
+  outline-color: var(--accent-00);
+}
+
 .filters__name-search {
   & input {
     width: 200px;
@@ -40,5 +44,6 @@
 
   & input {
     width: 96px;
+    text-align: right;
   }
 }
