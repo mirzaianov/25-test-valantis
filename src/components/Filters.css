@@ -25,7 +25,8 @@
 }
 
 .filters__input:focus {
-  outline-color: var(--accent-00);
+  border-color: var(--accent-00);
+  outline: 1px solid var(--accent-00);
 }
 
 .filters__name-search {
