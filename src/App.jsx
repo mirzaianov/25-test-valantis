@@ -19,22 +19,20 @@ export default function App() {
   const [isloading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [offset, setOffset] = useState(0);
-  // const [limit, setLimit] = useState(step);
   const [isEnd, setIsEnd] = useState(false);
   const [count, setCount] = useState(fetchCount);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
+  const [isFiltered, setIsFiltered] = useState(false);
+  const [filteredItems, setFilteredItems] = useState([]);
 
   const hash = useMemo(() => GenerateHash(), []);
 
   useEffect(() => {
-    // console.log(`useFetch`);
-
     let cancelled = false;
 
     setIsLoading(true);
     setItems([]);
-    // setError(null);
 
     const fetchData = () => {
       fetch(URL, {
@@ -51,8 +49,6 @@ export default function App() {
       })
         .then((res) => res.json())
         .then((respData) => {
-          // console.log(respData.result);
-
           if (respData.result.length < limit) {
             setIsEnd(true);
           }
@@ -74,9 +70,6 @@ export default function App() {
         })
         .then((res) => res.json())
         .then((respData) => {
-          // console.log(respData.result);
-
-          // const items = respData.result;
           const itemsMap = new Map();
           let min = Infinity;
           let max = -Infinity;
@@ -93,9 +86,9 @@ export default function App() {
           setMaxPrice(max);
 
           const itemsArray = Array.from(itemsMap.values());
-          // console.log(itemsArray);
 
           setItems(itemsArray);
+          // setFilteredItems(itemsArray); // note: for filters
         })
         .catch((e) => {
           console.error(e.message);
@@ -109,11 +102,8 @@ export default function App() {
 
           fetchData();
           setCount((prev) => prev + 1);
-          console.log(`count: ${count}`);
         })
         .finally(() => {
-          // console.log(`finally`);
-
           setIsLoading(false);
         });
     };
@@ -126,22 +116,48 @@ export default function App() {
   }, [hash, offset, error, count]);
 
   const handleNextClick = () => {
-    // console.log(`handleNextClick`);
-
     setOffset((prev) => prev + limit);
   };
 
   const handlePrevClick = () => {
-    // console.log(`handlePrevClick`);
-
-    // offset < limit ? null : setOffset((prev) => prev - limit);
-
     if (offset >= limit) {
       setOffset((prev) => prev - limit);
     }
   };
 
-  const onFilterChange = (minPrice, maxPrice) => {};
+  const filterByProduct = (e) => {
+    const name = e.target.value;
+    console.log(name);
+
+    if (name) {
+      setIsFiltered(true);
+
+      const updatedList = items.filter((item) => {
+        return item.product.toLowerCase().indexOf(name.toLowerCase()) !== -1;
+      });
+
+      setFilteredItems(updatedList);
+    } else {
+      setIsFiltered(false);
+    }
+  };
+
+  // const filterByBrand = (e) => {
+  //   console.log(`filterByBrand`);
+  //   const name = e.target.value;
+
+  //   if (name) {
+  //     setIsFiltered(true);
+
+  //     const updatedList = filteredItems.filter((item) => {
+  //       return item.brand.toLowerCase().search(name.toLowerCase()) !== -1;
+  //     });
+
+  //     setFilteredItems(updatedList);
+  //   } else {
+  //     setIsFiltered(false);
+  //   }
+  // };
 
   return (
     <div className="app">
@@ -156,8 +172,16 @@ export default function App() {
       <Filters
         minPrice={minPrice}
         maxPrice={maxPrice}
+        filterByProduct={filterByProduct}
+        // filterByBrand={filterByBrand}
       />
-      {isloading ? <Spinner /> : <CardList items={items} />}
+      {isloading ? (
+        <Spinner />
+      ) : isFiltered ? (
+        <CardList items={filteredItems} />
+      ) : (
+        <CardList items={items} />
+      )}
       <div className="app__buttons">
         <Button
           disabled={isloading || offset < limit}
