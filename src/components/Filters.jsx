@@ -37,10 +37,7 @@ const Filters = ({
             placeholder="Название изделия"
             className="filters__input"
             value={productFilter}
-            onChange={(e) => {
-              console.log(`productFilter >> `, e.target.value);
-              setProductFilter(e.target.value);
-            }}
+            onChange={(e) => setProductFilter(e.target.value)}
           />
         </div>
         <div className="filters__brand-search">
@@ -54,43 +51,37 @@ const Filters = ({
             placeholder="Имя бренда"
             className="filters__input"
             value={brandFilter}
-            onChange={(e) => {
-              console.log(`brandFilter >> `, e.target.value);
-              setBrandFilter(e.target.value);
-            }}
+            onChange={(e) => setBrandFilter(e.target.value)}
           />
         </div>
         <div className="filters__price-search">
           <label htmlFor="minPricePlaceholder">
-            <span>Цена от </span>
+            <span>Цена, </span>
           </label>
-          <input
-            id="minPricePlaceholder"
-            name="minPricePlaceholder"
-            type="number"
-            placeholder={`${numberWithSpaces(minPricePlaceholder)} ₽`}
-            className="filters__input"
-            value={minPriceFilter}
-            onChange={(e) => {
-              console.log(`minPriceFilter >> `, e.target.value);
-              setMinPriceFilter(e.target.value);
-            }}
-          />{' '}
-          <label htmlFor="maxPricePlaceholder">
-            <span>до </span>
-          </label>
-          <input
-            id="maxPricePlaceholder"
-            name="maxPricePlaceholder"
-            type="number"
-            placeholder={`${numberWithSpaces(maxPricePlaceholder)} ₽`}
-            className="filters__input"
-            value={maxPriceFilter}
-            onChange={(e) => {
-              console.log(`maxPriceFilter >> `, e.target.value);
-              setMaxPriceFilter(e.target.value);
-            }}
-          />
+          <div className="filters__price-wrapper">
+            <span>от </span>
+            <input
+              id="minPricePlaceholder"
+              name="minPricePlaceholder"
+              type="number"
+              placeholder={`${numberWithSpaces(minPricePlaceholder)} ₽`}
+              className="filters__input"
+              value={minPriceFilter}
+              onChange={(e) => setMinPriceFilter(e.target.value)}
+            />{' '}
+            <label htmlFor="maxPricePlaceholder">
+              <span>до </span>
+            </label>
+            <input
+              id="maxPricePlaceholder"
+              name="maxPricePlaceholder"
+              type="number"
+              placeholder={`${numberWithSpaces(maxPricePlaceholder)} ₽`}
+              className="filters__input"
+              value={maxPriceFilter}
+              onChange={(e) => setMaxPriceFilter(e.target.value)}
+            />
+          </div>
         </div>
       </div>
     </div>

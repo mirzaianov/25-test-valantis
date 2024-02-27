@@ -6,15 +6,16 @@
 }
 
 .filters__name {
-  align-self: start;
+  /* align-self: start; */
   font-weight: 700;
 }
 
 .filters__search {
   display: flex;
+  flex-direction: column;
   /* justify-content: space-between; */
   flex-wrap: wrap;
-  gap: var(--m);
+  row-gap: var(--xs);
 }
 
 .filters__input {
@@ -28,12 +29,20 @@
 }
 
 .filters__name-search {
+  display: flex;
+  align-items: center;
+  column-gap: var(--s);
+
   & input {
-    width: 200px;
+    width: 180px;
   }
 }
 
 .filters__brand-search {
+  display: flex;
+  align-items: center;
+  column-gap: var(--s);
+
   & input {
     width: 160px;
   }
@@ -41,9 +50,37 @@
 
 .filters__price-search {
   min-width: 288px;
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--xs);
 
   & input {
-    width: 96px;
+    width: 110px;
     text-align: right;
+  }
+}
+
+.filters__price-wrapper {
+  display: flex;
+  align-items: center;
+  column-gap: var(--xs);
+}
+
+@media screen and (min-width: 953px) {
+  .filters__search {
+    flex-direction: row;
+    column-gap: var(--l);
+  }
+
+  .filters__price-search {
+    flex-direction: row;
+    align-items: center;
+    column-gap: var(--xs);
+  }
+
+  .filters__name-search {
+    & input {
+      width: 190px;
+    }
   }
 }

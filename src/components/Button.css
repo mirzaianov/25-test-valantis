@@ -1,13 +1,14 @@
 .button {
+  min-width: 116px;
   border: none;
   cursor: pointer;
   font-family: inherit;
-  font-size: var(--m);
+  font-size: var(--s);
   line-height: inherit;
-  padding: var(--s) var(--m);
+  padding: var(--xs) var(--s);
   background-color: var(--accent-00);
   color: var(--text-00);
-  border-radius: var(--s);
+  border-radius: var(--xs);
   box-shadow: var(--2xs) var(--2xs) var(--xs) 0px var(--neutral-70);
 }
 

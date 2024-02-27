@@ -160,6 +160,14 @@ export default function App() {
     }
   }, [items, productFilter, brandFilter, minPriceFilter, maxPriceFilter]);
 
+  const CardListView = () => {
+    return filteredItems.length > 0 ? (
+      <CardList items={filteredItems} />
+    ) : (
+      <NoItemsFound />
+    );
+  };
+
   return (
     <div className="app">
       <div>
@@ -182,13 +190,7 @@ export default function App() {
         minPricePlaceholder={minPricePlaceholder}
         maxPricePlaceholder={maxPricePlaceholder}
       />
-      {isloading ? (
-        <Spinner />
-      ) : filteredItems.length > 0 ? (
-        <CardList items={filteredItems} />
-      ) : (
-        <NoItemsFound />
-      )}
+      {isloading ? <Spinner /> : <CardListView />}
       <div className="app__buttons">
         <Button
           disabled={isloading || offset < limit}

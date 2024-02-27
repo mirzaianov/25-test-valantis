@@ -1,11 +1,16 @@
 import NoItemsPhoto from '../assets/img/no-items-found.png';
 
+import './NoItemsFound.css';
+
 const NoItemsFound = () => {
   return (
     <div className="did-not-found">
-      <h3>Ничего не найдено</h3>
-      <h3>Попробуйте изменить параметры поиска</h3>
+      <p className="did-not-found__descr">
+        Ничего не найдено. <br />
+        Попробуйте изменить параметры поиска.
+      </p>
       <img
+        className="did-not-found__img"
         src={NoItemsPhoto}
         alt="Пусто"
       />
